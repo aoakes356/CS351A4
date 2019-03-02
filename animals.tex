@@ -1,0 +1,76 @@
+\documentclass{article}
+\usepackage[utf8]{inputenc}
+\usepackage{tabularx,ragged2e,booktabs,caption}
+
+\title{CS 351 Assignment Four}
+\author{Andrew Oakes}
+\date{March 2019}
+
+\begin{document}
+
+\maketitle
+
+\section{Summary}
+The one and only file, wah.py, contains the code for creating a bitmap from a file named 'animals.txt' and compressing a sorted and unsorted version of the bitmap using the WAH algorithm with 32 and 64 bit words. It creates six files in total: 
+\begin{itemize}
+  \item unsorted\_bitmap\_animals.txt
+  \item sorted\_bitmap\_animals.txt
+  \item sorted\_bitmap\_compressed32\_animals.txt
+  \item unsorted\_bitmap\_compressed32\_animals.txt
+  \item sorted\_bitmap\_compressed64\_animals.txt
+  \item unsorted\_bitmap\_compressed64\_animals.txt
+\end{itemize}
+
+\section{Results}
+
+\begin{center}
+\captionof{table}{Compression Ratio $\frac{newSize}{OldSize}$ } \label{tab:title}
+\begin{tabular}{ c c c}
+ & \textbf{32-bit} & \textbf{64-bit} \\ 
+ \textbf{Sorted} & .06791 & .13204 \\  
+ \textbf{Unsorted} & .97068 & .95613
+ 
+\end{tabular}
+\end{center}
+
+\begin{center}
+\captionof{table}{Runs of Zeroes}
+\begin{tabular}{ c c c}
+ & \textbf{32-bit} & \textbf{64-bit} \\ 
+ \textbf{Sorted} & 41045 & 19740 \\  
+ \textbf{Unsorted} & 1260 & 18
+ 
+\end{tabular}
+\end{center}
+
+\begin{center}
+\captionof{table}{Runs of Ones}
+\begin{tabular}{ c c c}
+ & \textbf{32-bit} & \textbf{64-bit} \\ 
+ \textbf{Sorted} & 8795 & 3870 \\  
+ \textbf{Unsorted} & 0 & 0
+ 
+\end{tabular}
+\end{center}
+
+\begin{center}
+\captionof{table}{Literals}
+\begin{tabular}{ c c c}
+ & \textbf{32-bit} & \textbf{64-bit} \\ 
+ \textbf{Sorted} & 1776 & 1798 \\  
+ \textbf{Unsorted} & 50356 & 25390
+ 
+\end{tabular}
+\end{center}
+
+\section{Analysis}
+
+\subsection{Sorting}
+From the results, we can tell the file with the best compression ratio was the 32-bit sorted compression, and the runner up was the 64-bit sorted compression. It is apparent that sorting the file makes a huge difference in the effectiveness of run length compression. The difference in the rate of compression between sorted and unsorted is roughly 90\% in the case of the 32-bit compression, and 82\% in the case of the 64-bit compression. The drastic difference in compression rate is due to the increase in the number of similar rows right next to each other in the sorted version, thus causing more runs and less literals. This is supported by the run counts in tables two and three, and the literal counts in table four.
+
+\subsection{Word Size}
+
+While word size seems to have less effect on the overall compression rate, it still is important that the word size is not too small or too large. From the data in the tables, we can see that the 64-bit compression was about half as effective as the 32-bit compression, likely due to the fact that 64 bits is larger than the average run size. This won't always be the case, but for the animals.txt file the runs are not large enough for that to be efficient.
+
+\end{document}
+

@@ -57,7 +57,7 @@ def compressCol(words,word_size):
     compressed = []
     for word in words:
         res = classifyWord(word,word_size)
-        if res == 0 or res == 1:   # run
+        if res == 0 or res == 1:   # Indicates a run.
             if res == 1:
                 o_runs += 1
             elif res == 0:
@@ -82,6 +82,7 @@ def compressCol(words,word_size):
                 compressed.append(compress(run_count,run_type,word, word_size))
                 # add current runs
                 # add this word with header bit 0
+    # return a tuple containing the run and literal counts
     return (compressed, z_runs,o_runs, literals)
 
 def wah(columns, word_size):
@@ -133,12 +134,18 @@ text.sort(key = sortKey)
 o_runs = 0
 z_runs = 0
 literals = 0
+
+# compress everything using the functions above, and write to the files.
+
+# write unsorted data
 with open('unsorted_bitmap_animals.txt','w') as f:
     f.write(wholeStr(col))
+# Get size of the file to check compression rates.
 bitmap_size = os.path.getsize("./unsorted_bitmap_animals.txt")
+# write sorted data
 with open('sorted_bitmap_animals.txt','w') as f:
     f.write(wholeStr(col2))
-
+# Write sorted 32-bit word compressed data
 with open('sorted_bitmap_compressed32_animals.txt','w') as f:
     res = wah(col2, 32)
     z_runs += res[1]
@@ -146,10 +153,11 @@ with open('sorted_bitmap_compressed32_animals.txt','w') as f:
     literals += res[3]
     f.write(res[0])
 sorted_compressed_32_size = os.path.getsize("./sorted_bitmap_compressed32_animals.txt") 
-print("----Sorted 32----\n 0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(sorted_compressed_32_size/bitmap_size)+"\n\n")
+print("----Sorted 32----\n0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(sorted_compressed_32_size/bitmap_size)+"\n\n")
 z_runs = 0
 o_runs = 0
 literals = 0
+# Write unsorted 32-bit word compressed data
 with open('unsorted_bitmap_compressed32_animals.txt','w') as f:
     res = wah(col, 32)
     z_runs += res[1]
@@ -158,10 +166,11 @@ with open('unsorted_bitmap_compressed32_animals.txt','w') as f:
     f.write(res[0])
 
 unsorted_compressed_32_size = os.path.getsize("./unsorted_bitmap_compressed32_animals.txt") 
-print("----Unsorted 32----\n 0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(unsorted_compressed_32_size/bitmap_size)+"\n\n")
+print("----Unsorted 32----\n0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(unsorted_compressed_32_size/bitmap_size)+"\n\n")
 z_runs = 0
 o_runs = 0
 literals = 0
+# write sorted 64-bit word compressed data.
 with open('sorted_bitmap_compressed64_animals.txt','w') as f:
     res = wah(col2, 64)
     z_runs += res[1]
@@ -170,10 +179,11 @@ with open('sorted_bitmap_compressed64_animals.txt','w') as f:
     f.write(res[0])
 
 sorted_compressed_64_size = os.path.getsize("sorted_bitmap_compressed64_animals.txt") 
-print("----Sorted 64----\n 0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(sorted_compressed_64_size/bitmap_size)+"\n\n")
+print("----Sorted 64----\n0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(sorted_compressed_64_size/bitmap_size)+"\n\n")
 o_runs = 0
 z_runs = 0
 literals = 0
+# write unsorted 64-bit word compressed data.
 with open('unsorted_bitmap_compressed64_animals.txt','w') as f:
     res = wah(col, 64)
     z_runs += res[1]
@@ -182,4 +192,4 @@ with open('unsorted_bitmap_compressed64_animals.txt','w') as f:
     f.write(res[0])
 
 unsorted_compressed_64_size = os.path.getsize("unsorted_bitmap_compressed64_animals.txt") 
-print("----Unsorted 64----\n 0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(unsorted_compressed_64_size/bitmap_size)+"\n\n")
+print("----Unsorted 64----\n0-Runs: "+str(z_runs)+"\n"+"1-Runs: "+str(o_runs)+"\n"+"Literals: "+str(literals)+"\n"+"Ratio: "+str(unsorted_compressed_64_size/bitmap_size)+"\n\n")
